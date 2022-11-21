@@ -57,7 +57,12 @@
         :direction="direction"
         :before-close="drawerHandleClose"
       >
-        <el-table v-loading="loading" :data="tableData" style="width: 100%" border>
+        <el-table
+          v-loading="loading"
+          :data="tableData"
+          style="width: 100%"
+          border
+        >
           <el-table-column fixed prop="ownerName" label="姓名">
           </el-table-column>
           <el-table-column fixed prop="departmentName" label="部门">
@@ -83,15 +88,25 @@
         :before-close="drawerHandleClose1"
       >
         <div slot="title">
-          <div style="display:flex;">
-         <div>
-          <div style="color:red;display: flex;align-items: center;">* 工时日期、工作描述可填可不填、项目编号、商户必填</div>
-          <div style="color:red;display: flex;align-items: center;">* 在tapd右上角<img style="width:36px;height:36px;" src="https://vanterc.oss-cn-beijing.aliyuncs.com/WX20221121-143713.png"/>内设置项目需求显示字段把项目编号勾选可不用手动填写项目编号</div>
-         </div>
-         <div>
-           <img style="width:300px;height:100px;" src="https://vanterc.oss-cn-beijing.aliyuncs.com/WX20221121-141734.png"/>
-         </div>
-         </div>
+          <div style="display: flex">
+            <div>
+              <div style="color: red; display: flex; align-items: center">
+                * 工时日期、工作描述可填可不填、项目编号、商户必填
+              </div>
+              <div style="color: red; display: flex; align-items: center">
+                * 在tapd右上角<img
+                  style="width: 36px; height: 36px"
+                  src="https://vanterc.oss-cn-beijing.aliyuncs.com/WX20221121-143713.png"
+                />内设置项目需求显示字段把项目编号勾选可不用手动填写项目编号
+              </div>
+            </div>
+            <div>
+              <img
+                style="width: 300px; height: 100px"
+                src="https://vanterc.oss-cn-beijing.aliyuncs.com/WX20221121-141734.png"
+              />
+            </div>
+          </div>
           <div>
             <el-button type="primary" @click="batchok" :loading="btloading"
               >批量填写</el-button
@@ -135,6 +150,8 @@
             </el-table-column>
             <el-table-column width="80" prop="developer" label="开发人员">
             </el-table-column>
+            <el-table-column width="80" prop="testuser" label="测试人员">
+            </el-table-column>
             <el-table-column width="300" prop="developer" label="项目编号">
               <template slot-scope="scope">
                 <el-select
@@ -153,7 +170,11 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column width="220" prop="workTime" label="工作日期(可不填自动带入)">
+            <el-table-column
+              width="220"
+              prop="workTime"
+              label="工作日期(可不填自动带入)"
+            >
               <template slot-scope="scope">
                 <el-date-picker
                   v-model="scope.row.workTime"
@@ -187,7 +208,11 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column width="220" prop="taskRemark" label="任务描述(可不填自动带入)">
+            <el-table-column
+              width="220"
+              prop="taskRemark"
+              label="任务描述(可不填自动带入)"
+            >
               <template slot-scope="scope">
                 <el-input
                   v-model="scope.row.taskRemark"
@@ -203,8 +228,8 @@
 </template>
 
 <script>
-import axios from 'axios';
-import moment from 'moment';
+import axios from "axios";
+import moment from "moment";
 export default {
   name: "#fmapp",
   data() {
@@ -302,7 +327,7 @@ export default {
             if (this.percentage === 100) {
               this.btloading = false;
               this.selectData = [];
-              let that = this
+              let that = this;
               setTimeout(() => {
                 that.showDrawer1();
               }, 1000);
@@ -311,11 +336,11 @@ export default {
               });
             }
           }
-        }else{
-          this.btloading = false
-          this.selectData = []
+        } else {
+          this.btloading = false;
+          this.selectData = [];
           this.$message.error({
-              message: res.msg
+            message: res.msg,
           });
         }
       });
@@ -328,19 +353,19 @@ export default {
         })
       ) {
         this.$message({
-          message: '请先选择项目编号！',
+          message: "请先选择项目编号！",
         });
         return false;
       }
       if (!this.partnersId) {
         this.$message({
-          message: '请先选择商户！',
+          message: "请先选择商户！",
         });
         return false;
       }
       if (this.selectData.length === 0) {
         this.$message({
-          message: '请先勾选需要填写的需求任务！',
+          message: "请先勾选需要填写的需求任务！",
         });
         return false;
       }
@@ -438,17 +463,36 @@ export default {
             let peoplename = _xquds[i].children[t].getAttribute(
               "data-editable-value"
             );
+            rowdata["developer"] = _xquds[i].children[t].getAttribute(
+              "data-editable-value"
+            );
             if (peoplename.indexOf(sessionStorage.fmUserName) != -1) {
               rowdata["people"] = sessionStorage.fmUserName;
               rowdata["developer"] = peoplename;
-            } else {
-              rowdata["people"] = "";
-              rowdata["developer"] = peoplename;
             }
-          } else if(_xquds[i].children[t].getAttribute("data-editable-field") ===
-                  "custom_field_three"){
-              rowdata['projectCode'] = _xquds[i].children[t].getAttribute('data-editable-value').split('_')[1]
-          } if (
+          } else if (
+            _xquds[i].children[t].getAttribute("data-editable-field") ===
+            "custom_field_100"
+          ) {
+            let peoplename = _xquds[i].children[t].getAttribute(
+              "data-editable-value"
+            );
+            rowdata["testuser"] = _xquds[i].children[t].getAttribute(
+              "data-editable-value"
+            );
+            if (peoplename.indexOf(sessionStorage.fmUserName) != -1) {
+              rowdata["people"] = sessionStorage.fmUserName;
+              rowdata["testuser"] = peoplename;
+            }
+          } else if (
+            _xquds[i].children[t].getAttribute("data-editable-field") ===
+            "custom_field_three"
+          ) {
+            rowdata["projectCode"] = _xquds[i].children[t]
+              .getAttribute("data-editable-value")
+              .split("_")[1];
+          }
+          if (
             _xquds[i].children[t].getAttribute("data-editable-field") === "name"
           ) {
             rowdata["taskname"] = _xquds[i].children[t].getAttribute(
@@ -508,32 +552,34 @@ export default {
         this.loading = false;
       });
     },
-    fetchFun(options){
+    fetchFun(options) {
       return new Promise((resolve, reject) => {
         const instance = axios.create({
           headers: {
-            token: sessionStorage.fmWorklogToken?sessionStorage.fmWorklogToken:null,
+            token: sessionStorage.fmWorklogToken
+              ? sessionStorage.fmWorklogToken
+              : null,
           },
         });
         instance(options)
-          .then(response => {
-            console.log(response)
-            if(response.data.code == "100" || response.status == 200){
-                resolve(response.data)
-            }else if(response.data.code == "403"){
-                sessionStorage.removeItem('fmWorklogToken')
-                this.$message({
-                  message: '登录已过期，请重新刷新页面！',
-                });
-            }else{
-              reject(response.data)
+          .then((response) => {
+            console.log(response);
+            if (response.data.code == "100" || response.status == 200) {
+              resolve(response.data);
+            } else if (response.data.code == "403") {
+              sessionStorage.removeItem("fmWorklogToken");
+              this.$message({
+                message: "登录已过期，请重新刷新页面！",
+              });
+            } else {
+              reject(response.data);
             }
-
-        }).catch(error => {
-            reject(error)
-        })
-      })
-    }
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
   },
 };
 </script>
