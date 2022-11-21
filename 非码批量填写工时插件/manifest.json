@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+ 
+  "name": "非码批量填写工时",
+  "description": "非码批量填写工时",
+  "version": "1.0",
+  "icons": {
+    "128":"logo.png"
+  },
+ 
+  "permissions": [
+    "tabs",
+    "https://*.tapd.cn/*"
+  ],
+  "browser_action": {
+    "default_icon": "logo.png",
+    "default_popup": "hello.html"
+  },
+  "content_scripts": [
+    {"js":["hello.js","app.js","chunk-vendors.js"],"matches":["https://www.tapd.cn/*/prong/iterations/card_view?q=*"]}
+  ]
+}
